@@ -1,5 +1,3 @@
-version: '3.8'
-
 # TradingAgents-CN v1.0.0-preview Docker Compose配置
 # 支持前后端分离部署
 
@@ -149,7 +147,7 @@ services:
 
   # Redis Commander 管理界面（可选）
   redis-commander:
-    image: ghcr.io/joeferner/redis-commander:latest
+    image: rediscommander/redis-commander:latest
     container_name: tradingagents-redis-commander
     restart: unless-stopped
     ports:
