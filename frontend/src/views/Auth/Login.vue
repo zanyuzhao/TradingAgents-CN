@@ -56,14 +56,7 @@
                 </el-button>
               </el-form-item>
 
-              <el-form-item>
-                <div class="login-tip">
-                  <el-text type="info" size="small">
-                    开源版使用默认账号：admin / admin123
-                  </el-text>
-                </div>
-              </el-form-item>
-            </el-form>
+              </el-form>
           </el-tab-pane>
 
           <el-tab-pane label="注册" name="register">
@@ -346,12 +339,6 @@ const handleRegister = async () => {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-  }
-
-  .login-tip {
-    text-align: center;
-    width: 100%;
-    color: var(--el-text-color-regular);
   }
 }
 

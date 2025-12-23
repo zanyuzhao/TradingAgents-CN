@@ -7,6 +7,9 @@ import { ElMessage } from 'element-plus'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
+// 🚀 性能优化集成
+import { performanceOptimizer } from '@/utils/performance'
+
 // 配置NProgress
 NProgress.configure({
   showSpinner: false,
@@ -415,10 +418,25 @@ router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
   const appStore = useAppStore()
 
+  // 🚀 性能优化：开始路由性能测量
+  performanceOptimizer.utils.mark(`route-start-${to.name}`)
+
   // 设置页面标题
   const title = to.meta.title as string
   if (title) {
     document.title = `${title} - A股-智能体`
+  }
+
+  // 🚀 简化的性能优化
+  if (from.name && to.name !== from.name) {
+    // 基于当前路由预测下一步可能访问的路由
+    const predictions = predictNextRoutes(from.name as string)
+    predictions.forEach(routeName => {
+      performanceOptimizer.routes.prefetch(routeName)
+    })
+
+    // 简单的智能库加载提示
+    performanceOptimizer.libraries.smartLoad(`navigate_to_${to.name as string}`)
   }
 
   console.log('🚦 路由守卫检查:', {
@@ -515,9 +533,14 @@ router.afterEach((to, from) => {
   // 结束进度条
   NProgress.done()
 
+  // 🚀 简化的性能优化
+  performanceOptimizer.mark(`route-end-${to.name}`)
+  performanceOptimizer.measure(`route-change-${to.name}`, `route-start-${to.name}`, `route-end-${to.name}`)
+
   // 页面切换后的处理
   nextTick(() => {
-    // 可以在这里添加页面分析、埋点等逻辑
+    // 🚀 记录页面访问
+    performanceOptimizer.recordPageVisit(to.name as string)
   })
 })
 
@@ -529,6 +552,19 @@ router.onError((error) => {
 })
 
 export default router
+
+// 🚀 预测下一个可能访问的路由
+function predictNextRoutes(currentRoute: string): string[] {
+  const predictions: Record<string, string[]> = {
+    'Dashboard': ['SingleAnalysis', 'StockScreeningHome', 'FavoritesHome'],
+    'SingleAnalysis': ['StockDetail', 'BatchAnalysis', 'ReportsHome'],
+    'StockScreeningHome': ['SingleAnalysis', 'FavoritesHome'],
+    'ReportsHome': ['ReportDetail', 'SingleAnalysis'],
+    'SettingsHome': ['ConfigManagement', 'UsageStatistics']
+  }
+
+  return predictions[currentRoute] || []
+}
 
 // 导出路由配置供其他地方使用
 export { routes }

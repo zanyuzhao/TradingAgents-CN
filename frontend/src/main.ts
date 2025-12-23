@@ -18,6 +18,9 @@ import { setupTokenRefreshTimer } from './utils/auth'
 import './styles/index.scss'
 import './styles/dark-theme.scss'
 
+// 🚀 性能优化集成
+import { performanceOptimizer, PerformancePlugin } from '@/utils/performance'
+
 // 创建应用实例
 const app = createApp(App)
 
@@ -30,6 +33,9 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 const pinia = createPinia()
 app.use(pinia)
 app.use(router)
+
+// 🚀 集成简化的性能优化插件
+app.use(PerformancePlugin)
 // 设置全局中文 locale（Element Plus）
 dayjs.locale('zh-cn')
 app.use(ElementPlus, {
@@ -84,6 +90,12 @@ const initApp = async () => {
     const appStore = useAppStore()
 
     console.log('🔄 初始化应用状态...')
+
+    // 🚀 启动性能优化（开发环境）
+    if (import.meta.env.DEV) {
+      console.log('📊 Performance optimization enabled')
+      console.log('📊 Stats:', performanceOptimizer.getStats())
+    }
 
     // 应用主题
     appStore.applyTheme()
@@ -145,4 +157,20 @@ if (import.meta.env.DEV) {
   console.log('🚀 A股-智能体 v1.0.0-preview 前端应用已启动')
   console.log('📊 当前环境:', import.meta.env.MODE)
   console.log('🔗 API地址:', import.meta.env.VITE_API_BASE_URL || '/api')
+  console.log('⚡ 性能优化已启用')
+
+  // 🚀 5秒后生成性能报告
+  setTimeout(async () => {
+    try {
+      const { default: SimpleReport } = await import('./utils/performance/SimpleReport')
+      const report = new SimpleReport()
+      report.printReport()
+
+      // 暴露到全局对象
+      ;(window as any).performanceReport = report
+      console.log('📋 性能报告工具已加载，可使用 performanceReport.printReport() 查看最新报告')
+    } catch (error) {
+      console.warn('性能报告工具加载失败:', error)
+    }
+  }, 5000)
 }

@@ -292,7 +292,8 @@
         </el-card>
 
         <!-- 多数据源同步 -->
-        <MultiSourceSyncCard style="margin-top: 24px;" />
+        <!-- 使用原始组件，避免懒加载复杂性 -->
+      <MultiSourceSyncCard style="margin-top: 24px;" />
       </el-col>
     </el-row>
   </div>
@@ -318,6 +319,16 @@ import MultiSourceSyncCard from '@/components/Dashboard/MultiSourceSyncCard.vue'
 import { favoritesApi } from '@/api/favorites'
 import { analysisApi } from '@/api/analysis'
 import { newsApi } from '@/api/news'
+
+// 🚀 简化的性能优化集成
+import { performanceOptimizer } from '@/utils/performance'
+
+// 🚀 记录页面访问
+onMounted(async () => {
+  // 记录仪表板访问
+  performanceOptimizer.recordPageVisit('Dashboard')
+  console.log('📊 Dashboard page loaded')
+})
 import { paperApi, type PaperAccountSummary } from '@/api/paper'
 
 const router = useRouter()

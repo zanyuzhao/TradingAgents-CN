@@ -707,6 +707,16 @@ import {
 } from '@element-plus/icons-vue'
 import { analysisApi, type SingleAnalysisRequest } from '@/api/analysis'
 import { paperApi } from '@/api/paper'
+
+// 🚀 简化的性能优化集成
+import { performanceOptimizer } from '@/utils/performance'
+
+// 🚀 记录页面访问和简单优化
+onMounted(async () => {
+  // 记录页面访问
+  performanceOptimizer.recordPageVisit('SingleAnalysis')
+  console.log('📊 SingleAnalysis page loaded')
+})
 import { stocksApi } from '@/api/stocks'
 import { useAppStore } from '@/stores/app'
 import { useAuthStore } from '@/stores/auth'

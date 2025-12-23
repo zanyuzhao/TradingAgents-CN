@@ -4,9 +4,9 @@
   "description": "TradingAgents-CN 现代化前端界面",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview",
+    "preview": "vite preview --host 0.0.0.0",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "type-check": "vue-tsc --noEmit"
